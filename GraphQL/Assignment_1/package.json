@@ -1,0 +1,17 @@
+{
+  "name": "graphql_assignment_1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "Caner Sülüşoğlu",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server": "^3.10.0",
+    "apollo-server-core": "^3.10.0",
+    "graphql": "^16.5.0"
+  }
+}
