@@ -7,6 +7,7 @@ This repository includes projects about GraphQL technology.
 ## Assignments
 
 - [Assignment 1](./Assignment_1/)
+- [Assignment 2](./Assignment_2/)
 
 
 <p align="center">
