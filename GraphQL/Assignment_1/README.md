@@ -1,4 +1,4 @@
-# GraphQL Assignment 1
+# GraphQL Assignment 1 - [Queries]
 
 ## Requirements
 
