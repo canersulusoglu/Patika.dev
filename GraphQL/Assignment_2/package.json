@@ -1,5 +1,5 @@
 {
-  "name": "graphql_assignment_1",
+  "name": "graphql_assignment_2",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -12,7 +12,6 @@
   "dependencies": {
     "apollo-server": "^3.10.0",
     "apollo-server-core": "^3.10.0",
-    "graphql": "^16.5.0",
-    "uuidv4": "^6.2.13"
+    "graphql": "^16.5.0"
   }
 }

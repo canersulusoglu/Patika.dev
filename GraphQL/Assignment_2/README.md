@@ -1,4 +1,4 @@
-# GraphQL Assignment 2
+# GraphQL Assignment 2 - [Mutations]
 
 - There are 4  types. User, Event, Location and Participant. Each have 4 mutations:
   - create
