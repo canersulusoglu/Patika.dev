@@ -1,0 +1,53 @@
+type Event {
+    id: Int!,
+    title: String
+    desc: String
+    date: String
+    from: String
+    to: String
+    location_id: Int!
+    user_id: Int!
+    user: User
+    participants: [Participant]
+    location: Location
+    createdDate: String
+    updatedDate: String
+}
+
+input CreateEventInput {
+    title: String!
+    desc: String!
+    date: String!
+    from: String!
+    to: String!
+    location_id: Int!
+    user_id: Int!
+}
+
+input UpdateEventInput {
+    title: String
+    desc: String
+    date: String
+    from: String
+    to: String
+    location_id: Int
+    user_id: Int
+}
+
+type Query {
+    events: [Event]
+    eventCount: Int!
+    eventsPagination(pageNumber: Int!, itemPerPage: Int!): [Event]
+    event(id: Int!): Event
+}
+
+type Mutation {
+    createEvent(data: CreateEventInput!) : Event
+    updateEvent(id: Int!, data: UpdateEventInput!) : Event
+    deleteEvent(id: Int!) : Event
+    deleteAllEvents: Int
+}
+
+type Subscription {
+    eventCreated: Event!
+}

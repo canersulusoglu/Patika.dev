@@ -9,6 +9,8 @@ This repository includes projects about GraphQL technology.
 - [Assignment 1 - [Queries]](./Assignment_1/)
 - [Assignment 2 - [Mutations]](./Assignment_2/)
 - [Assignment 3 - [Subscriptions]](./Assignment_3/)
+- [Event App](./EventApp/)
+
 
 
 <p align="center">
