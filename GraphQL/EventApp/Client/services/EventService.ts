@@ -53,6 +53,23 @@ class EventService {
             }
         }
     `;
+
+    public static SUBSCRIPTION_EVENT_CREATED = gql`
+        subscription EventCreated {
+            eventCreated {
+                id
+                title
+                desc
+                date
+            }
+        }
+    `;
+
+    public static SUBSCRIPTION_EVENT_COUNT = gql`
+        subscription EventCount {
+            eventCount
+        }
+    `;
 }
 
 export default EventService;

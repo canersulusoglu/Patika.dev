@@ -10,8 +10,7 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Pagination,
-  Stack
+  Pagination
 } from '@mui/material';
 import {
   LocalizationProvider,
@@ -27,7 +26,8 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import {
   useLazyQuery,
-  useQuery
+  useQuery,
+  useSubscription
 } from '@apollo/client'
 import EventService from 'services/EventService';
 import {
@@ -58,10 +58,10 @@ const Home: Page = () => {
     },
   });
 
-  const [events, setEvents] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
-  const { loading, error, data } = useQuery(EventService.GET_EVENTS_COUNT);
-  const [getEvents] = useLazyQuery(EventService.GET_EVENTS_PAGINATION);
+  const { loading : eventsCountLoading, error : eventsCountError, data : eventsCountData } = useQuery(EventService.GET_EVENTS_COUNT);
+  const [getEvents, { subscribeToMore, fetchMore, error: eventsError, loading: eventsLoading, data: { eventsPagination : events = []} = {} }] = useLazyQuery(EventService.GET_EVENTS_PAGINATION);
+  const { loading: eventCountSubsriptionLoading, data: eventCountSubsriptionData} = useSubscription(EventService.SUBSCRIPTION_EVENT_COUNT);
 
   useEffect(() => {
     getEvents({
@@ -69,33 +69,36 @@ const Home: Page = () => {
         pageNumber: 1,
         itemPerPage: itemPerPage
       }
-    })
-    .then(res => {
-      if(!res.error){
-        var newEvents = res.data.eventsPagination;
-        setEvents(newEvents);
+    });
+
+    subscribeToMore({
+      document: EventService.SUBSCRIPTION_EVENT_CREATED,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) return prev;
+        const newEvent = subscriptionData.data.eventCreated;
+        const slicedEvents = prev.eventsPagination.slice(0, prev.eventsPagination.length - 1);
+        return {
+          eventsPagination: [newEvent, ...slicedEvents]
+        };
       }
     })
   }, [])
   
   const pageChanged = (_e, pageNumber) => {
     setPageNumber(pageNumber);
-    getEvents({
+    fetchMore({
       variables: {
         pageNumber: pageNumber,
         itemPerPage: itemPerPage
-      }
-    })
-    .then(res => {
-      if(!res.error){
-        var newEvents = res.data.eventsPagination;
-        setEvents(newEvents);
+      },
+      updateQuery:(prev, { fetchMoreResult }) => {
+        return fetchMoreResult;
       }
     })
   }
 
-  if (loading || !data) return <p>Loading ...</p>;
-  if (error) return `Error! ${error}`;
+  if (eventsCountLoading || eventsLoading) return <p>Loading ...</p>;
+  if (eventsCountError || eventsError) return `Error! ${error}`;
 
   return (
     <div className={styles.container}>
@@ -166,6 +169,16 @@ const Home: Page = () => {
         </AccordionDetails>
       </Accordion>
 
+      <Typography variant='h6' display="flex" justifyContent="end" style={{margin: '1rem'}}>
+          {
+            !eventCountSubsriptionLoading ? 
+              eventCountSubsriptionData.eventCount
+            : 
+              eventsCountData.eventCount
+          } 
+          &nbsp;events
+      </Typography>
+
       {
         events.map((event, index) => {
           return(
@@ -180,12 +193,11 @@ const Home: Page = () => {
         })
       }
 
-
       <div className={styles.pagination}>
         <Pagination 
           onChange={pageChanged} 
           page={pageNumber} 
-          count={Math.ceil(data.eventCount / itemPerPage) - 1} 
+          count={eventCountSubsriptionLoading ? (Math.ceil(eventsCountData.eventCount / itemPerPage) - 1) : (Math.ceil(eventCountSubsriptionData.eventCount / itemPerPage) - 1)} 
           showFirstButton 
           showLastButton 
           variant="outlined" 

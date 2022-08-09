@@ -1,4 +1,4 @@
-export default {
+module.exports = {
     Query: {
         locations: (_, __, { db }) => db.locations,
         location: (_parent, args, { db }) => db.locations.find(x => x.id === args.id),
@@ -8,7 +8,7 @@ export default {
             data.id = (db.locations.length + 1)
             data.createdDate = new Date().toUTCString();
             data.updatedDate = null;
-            db.locations.push(data);
+            db.locations.unshift(data);
             return data;
         },
         updateLocation: (_parent, { id, data }, { db }) => {

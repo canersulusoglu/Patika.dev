@@ -8,10 +8,13 @@ import { useServer } from "graphql-ws/lib/use/ws";
 import typeDefs from "./graphql/typeDefs";
 import resolvers from "./graphql/resolvers";
 import db from './data.json';
+import { PubSub } from "graphql-subscriptions";
 
 const PORT = 4000;
 
 (async () => {
+    const pubsub = new PubSub();
+
     const schema = makeExecutableSchema({ typeDefs, resolvers });
 
     const app = express();
@@ -23,7 +26,16 @@ const PORT = 4000;
         path: '/',
     });
 
-    const serverCleanup = useServer({ schema }, wsServer);
+    const serverCleanup = useServer(
+        { 
+            schema, 
+            context: (_ctx, _msg, _args) => ({ 
+                db, 
+                pubsub 
+            }),
+        }, 
+        wsServer
+    );
 
     const server = new ApolloServer({
         schema,
@@ -32,17 +44,15 @@ const PORT = 4000;
             {
             async serverWillStart() {
                 return {
-                async drainServer() {
-                    await serverCleanup.dispose();
-                },
+                    async drainServer() {
+                        await serverCleanup.dispose();
+                    },
                 };
             },
             },
             ApolloServerPluginLandingPageLocalDefault({ embed: true }),
         ],
-        context: {
-            db
-        }
+        context: ({ req, res }) => ({req, res, db, pubsub}),
     });
 
     await server.start();

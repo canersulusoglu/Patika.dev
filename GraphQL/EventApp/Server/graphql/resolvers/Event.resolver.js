@@ -1,6 +1,4 @@
-import pubsub from '../pubSub'
-
-export default {
+module.exports = {
     Query: {
         events: (_, __, { db }) => db.events,
         eventCount: (_, __, { db }) => db.events.length,
@@ -12,7 +10,7 @@ export default {
         event: (_parent, args, { db }) => db.events.find(x => x.id === args.id),
     },
     Mutation: {
-        createEvent: (_parent, { data }, { db }) => {
+        createEvent: (_parent, { data }, { db, pubsub }) => {
             const user = db.users.find(x => x.id === data.user_id);
             const location = db.locations.find(x => x.id === data.location_id);
             if(!user){
@@ -24,9 +22,10 @@ export default {
             data.id = (db.events.length + 1)
             data.createdDate = new Date().toUTCString();
             data.updatedDate = null;
-            db.events.push(data);
-            // Publish event
+            db.events.unshift(data);
+            // Publish events
             pubsub.publish("EVENT_CREATED", { eventCreated: data });
+            pubsub.publish("EVENT_COUNT", { eventCount: db.events.length });
             return data;
         },
         updateEvent: (_parent, { id, data }, { db }) => {
@@ -53,6 +52,8 @@ export default {
     
             const event = db.events[eventIndex];
             db.events.splice(eventIndex, 1);
+            // Publish events
+            pubsub.publish("EVENT_COUNT", { eventCount: db.events.length });
             return event;
         },
         deleteAllEvents: (_parent, _args, { db }) => {
@@ -65,10 +66,13 @@ export default {
         eventCreated: {
             subscribe: () => pubsub.asyncIterator("EVENT_CREATED")
         },
+        eventCount: {
+            subscribe: () => pubsub.asyncIterator("EVENT_COUNT")
+        }
     },
     Event: {
         user: (parent, _args, { db }) => db.users.find(x => x.id === parent.user_id),
-        participants: (parent, _args, { db }) => db. participants.filter(x => x.event_id === parent.id),
+        participants: (parent, _args, { db }) => db.participants.filter(x => x.event_id === parent.id),
         location: (parent, _args, { db }) => db.locations.find(x => x.id === parent.location_id)
     }
 }

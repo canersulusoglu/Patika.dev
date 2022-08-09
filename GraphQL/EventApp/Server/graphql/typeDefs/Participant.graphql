@@ -31,5 +31,5 @@ type Mutation {
 }
 
 type Subscription {
-    participantAdded: Participant!
+    participantAdded(event_id: Int!): Participant!
 }

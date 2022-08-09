@@ -1,12 +1,8 @@
 import '../styles/globals.css'
 import { AppProps } from 'types/AppProps';
 import MainLayout from 'layouts/MainLayout'
-import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
-
-const apolloClient = new ApolloClient({
-  uri: "http://localhost:4000",
-  cache: new InMemoryCache(),
-});
+import { ApolloProvider } from "@apollo/client";
+import apolloClient from 'utils/apolloClient';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (

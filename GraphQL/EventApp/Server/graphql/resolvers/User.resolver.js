@@ -1,16 +1,14 @@
-import pubsub from '../pubSub'
-
-export default {
+module.exports = {
     Query: {
         users: (_, __, { db }) => db.users,
         user: (_parent, args, { db }) => db.users.find(x => x.id === args.id),
     },
     Mutation: {
-        createUser: (_parent, { data }, { db }) => {
+        createUser: (_parent, { data }, { db, pubsub }) => {
             data.id = db.users.length + 1
             data.createdDate = new Date().toUTCString(),
             data.updatedDate = null
-            db.users.push(data);
+            db.users.unshift(data);
             // Publish event
             pubsub.publish("USER_CREATED", { userCreated: data });
             return data;
@@ -49,7 +47,7 @@ export default {
     },
     Subscription: {
         userCreated: {
-            subscribe: () => pubsub.asyncIterator("USER_CREATED") 
+            subscribe: (_, __, { pubsub }) => pubsub.asyncIterator("USER_CREATED") 
         },
     },
     User: {

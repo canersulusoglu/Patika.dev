@@ -4,6 +4,12 @@ import { mergeResolvers } from "@graphql-tools/merge"
 
 const resolversArray = loadFilesSync(path.join(__dirname), {
     extensions: ['resolver.js'],
+    extractExports: fileExport => {
+      if (typeof fileExport === 'function') {
+        return fileExport('query_root')
+      }
+      return fileExport
+    }
 })
 
-export default mergeResolvers(resolversArray)
+export default mergeResolvers(resolversArray);

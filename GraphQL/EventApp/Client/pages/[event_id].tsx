@@ -2,7 +2,9 @@ import type { Page } from "types/Page";
 import styles from 'styles/pages/EventDetail.module.css';
 import { useEffect } from "react";
 import { useRouter } from "next/router";
-import { useLazyQuery } from "@apollo/client";
+import { 
+    useLazyQuery
+} from "@apollo/client";
 import EventService from "services/EventService";
 import {
     Grid,
@@ -14,15 +16,16 @@ import {
 import {
     Schedule as ScheduleIcon,
     Event as EventIcon,
-    ContactMailOutlined as ContactMailIcon,
-    BadgeOutlined as BadgeIcon
+    MailOutlined as MailIcon,
+    PersonOutlined as PersonIcon
 } from '@mui/icons-material';
+import ParticipantService from "services/ParticipantService";
 
 const EventDetail: Page = () => {
     const Router = useRouter();
     const { event_id } = Router.query;
 
-    const [fetchData, { loading, error, data }] = useLazyQuery(EventService.GET_EVENT_DETAILS);
+    const [fetchData, { loading, error, data, subscribeToMore }] = useLazyQuery(EventService.GET_EVENT_DETAILS);
 
     useEffect(() => {
         if(!Router.isReady) return;
@@ -31,13 +34,29 @@ const EventDetail: Page = () => {
                 eventId: Number(event_id)
             }
         })
-    }, [Router.isReady])
+
+        subscribeToMore({
+            document: ParticipantService.SUBSCRIPTION_PARTICIPANT_ADDED,
+            variables: {
+                eventId: Number(event_id)
+            },
+            updateQuery: (prev, { subscriptionData }) => {
+                if (!subscriptionData.data) return prev;
+                const newParticipant = subscriptionData.data.participantAdded;
+                return {
+                    event: {
+                        ...prev.event,
+                        participants: [newParticipant, ...prev.event.participants]
+                    }
+                };
+            }
+        })
+        
+    }, [event_id])
     
 
     if (loading || !data) return <p>Loading ...</p>;
     if (error) return `Error! ${error}`;
-
-    console.log(data);
 
     return(
         <div className={styles.container}>
@@ -97,13 +116,13 @@ const EventDetail: Page = () => {
                                     </Grid>
                                     <Grid item xs={12} md={6}>
                                         <Typography variant="body2" display="flex" justifyContent="center" alignItems="center">
-                                            <BadgeIcon style={{marginRight: '.5rem'}}/>
+                                            <PersonIcon style={{marginRight: '.5rem'}}/>
                                             {data.event.user.username}
                                         </Typography>
                                     </Grid>
                                     <Grid item xs={12} md={6}>
                                         <Typography variant="body2" display="flex" justifyContent="center" alignItems="center">
-                                            <ContactMailIcon style={{marginRight: '.5rem'}}/>
+                                            <MailIcon style={{marginRight: '.5rem'}}/>
                                             {data.event.user.email}
                                         </Typography>
                                     </Grid>
@@ -120,17 +139,16 @@ const EventDetail: Page = () => {
                             <Grid container spacing={2}>
                                 {
                                     data.event.participants.map((p, index) => {
-                                        console.log(p);
                                         return(
                                             <Grid key={index} item xs={12} sm={6}>
                                                 <Card variant="outlined" >
                                                     <CardContent>
                                                         <Typography variant="body2" display="flex" justifyContent="center" alignItems="center">
-                                                            <BadgeIcon style={{marginRight: '.5rem'}}/>
+                                                            <PersonIcon style={{marginRight: '.5rem'}}/>
                                                             {p.user.username}
                                                         </Typography>
                                                         <Typography variant="body2" display="flex" justifyContent="center" alignItems="center">
-                                                            <ContactMailIcon style={{marginRight: '.5rem'}}/>
+                                                            <MailIcon style={{marginRight: '.5rem'}}/>
                                                             {p.user.email}
                                                         </Typography>
                                                     </CardContent>
