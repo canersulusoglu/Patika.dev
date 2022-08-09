@@ -85,7 +85,7 @@ const Home: Page = () => {
       userId: yup.string().required("User is required."),
     }),
     onSubmit: ({title, description, eventDate, eventFrom, eventTo, locationId, userId} : any) => {
-      const eventDateString = eventDate.getFullYear() + "-" + (eventDate.getMonth() + 1) + "-" + eventDate.getDate();
+      const eventDateString = eventDate.getDate() + "." + (eventDate.getMonth() + 1) + "." + eventDate.getFullYear();
       const eventFromString = ("0" + eventFrom.getHours(2)).slice(-2) + ':' + ("0" + eventFrom.getMinutes(2)).slice(-2);
       const eventToString = ("0" + eventTo.getHours(2)).slice(-2) + ':' + ("0" + eventTo.getMinutes(2)).slice(-2);
 
@@ -97,8 +97,8 @@ const Home: Page = () => {
             date: eventDateString,
             from: eventFromString,
             to: eventToString,
-            location_id: Number(locationId),
-            user_id: Number(userId)
+            locationId: locationId,
+            userId: userId
           }
         }
       })
@@ -118,9 +118,8 @@ const Home: Page = () => {
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data) return prev;
         const newEvent = subscriptionData.data.eventCreated;
-        const slicedEvents = prev.eventsPagination.slice(0, prev.eventsPagination.length - 1);
         return {
-          eventsPagination: [newEvent, ...slicedEvents]
+          eventsPagination: [newEvent, ...prev.eventsPagination]
         };
       }
     })

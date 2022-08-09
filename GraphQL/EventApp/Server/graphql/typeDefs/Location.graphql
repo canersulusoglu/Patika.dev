@@ -1,11 +1,11 @@
 type Location {
-    id: Int!
+    id: ID!
     name: String
     desc: String
     lat: Float
     lng: Float
-    createdDate: String
-    updatedDate: String
+    createdAt: String
+    updatedAt: String
 }
 
 input CreateLocationInput {
@@ -29,7 +29,7 @@ type Query {
 
 type Mutation {
     createLocation(data: CreateLocationInput!) : Location
-    updateLocation(id: Int!, data: UpdateLocationInput!) : Location
-    deleteLocation(id: Int!) : Location
+    updateLocation(id: ID!, data: UpdateLocationInput!) : Location
+    deleteLocation(id: ID!) : Location
     deleteAllLocations: Int
 }

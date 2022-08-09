@@ -1,49 +1,21 @@
 module.exports = {
     Query: {
-        users: (_, __, { db }) => db.users,
-        user: (_parent, args, { db }) => db.users.find(x => x.id === args.id),
+        users: async (_, __, { db: { Users } }) => await Users.find(),
+        user: async (_, args, { db: { Users } }) => await Users.findById(args.id)
     },
     Mutation: {
-        createUser: (_parent, { data }, { db, pubsub }) => {
-            data.id = db.users.length + 1
-            data.createdDate = new Date().toUTCString(),
-            data.updatedDate = null
-            db.users.unshift(data);
+        createUser: async (_, { data }, { pubsub, db: { Users } }) => {
+            var createdUser = await Users.create(data)
             // Publish event
-            pubsub.publish("USER_CREATED", { userCreated: data });
-            return data;
+            pubsub.publish("USER_CREATED", { userCreated: createdUser });
+            return createdUser;
         },
-        updateUser: (_parent, { id, data }, { db }) => {
-            const userIndex = db.users.findIndex(x => x.id === id);
-    
-            if(userIndex === -1){
-                throw new Error("User not found!");
-            }
-    
-            db.users[userIndex] = {
-                ...db.users[userIndex],
-                ...data,
-                updatedDate: new Date().toUTCString()
-            }
-    
-            return db.users[userIndex];
-        },
-        deleteUser: (_parent, { id }, { db }) => {
-            const userIndex = db.users.findIndex(x => x.id === id);
-    
-            if(userIndex === -1){
-                throw new Error("User not found!");
-            }
-    
-            const user = db.users[userIndex];
-            db.users.splice(userIndex, 1);
-            return user;
-        },
-        deleteAllUsers: (_parent, _args, { db }) => {
-            const length = db.users.length;
-            db.users.splice(0, length);
-            return length;
-        },
+        updateUser: async (_, { id, data }, { db: { Users } }) => await Users.findByIdAndUpdate(id, data, {new: true}),
+        deleteUser: async (_, { id }, { db: { Users } }) => await Users.findByIdAndRemove(id),
+        deleteAllUsers: async (_, _args, { db: { Users } }) => {
+            var { _, deletedCount } = await Users.deleteMany()
+            return deletedCount;
+        }
     },
     Subscription: {
         userCreated: {
@@ -51,6 +23,6 @@ module.exports = {
         },
     },
     User: {
-        events: (parent, _args, { db }) => db.events.filter(x => x.user_id === parent.id)
+        events: async (parent, __, { db: { Events } }) => await Events.find({userId: parent.id})
     }
 }

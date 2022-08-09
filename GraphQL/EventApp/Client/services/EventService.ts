@@ -30,7 +30,7 @@ class EventService {
     `;
 
     public static GET_EVENT_DETAILS = gql`
-        query EventDetail($eventId: Int!) {
+        query EventDetail($eventId: ID!) {
             event(id: $eventId) {
                 id
                 title
@@ -58,7 +58,7 @@ class EventService {
         mutation CreateEvent($data: CreateEventInput!) {
             createEvent(data: $data) {
                 id
-                createdDate
+                createdAt
             }
         }
     `;

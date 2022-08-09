@@ -1,17 +1,17 @@
 type Event {
-    id: Int!,
+    id: ID!,
     title: String
     desc: String
     date: String
     from: String
     to: String
-    location_id: Int!
-    user_id: Int!
+    locationId: ID!
+    userId: ID!
     user: User
     participants: [Participant]
     location: Location
-    createdDate: String
-    updatedDate: String
+    createdAt: String
+    updatedAt: String
 }
 
 input CreateEventInput {
@@ -20,8 +20,8 @@ input CreateEventInput {
     date: String!
     from: String!
     to: String!
-    location_id: Int!
-    user_id: Int!
+    locationId: ID!
+    userId: ID!
 }
 
 input UpdateEventInput {
@@ -30,21 +30,21 @@ input UpdateEventInput {
     date: String
     from: String
     to: String
-    location_id: Int
-    user_id: Int
+    locationId: ID
+    userId: ID
 }
 
 type Query {
     events: [Event]
     eventCount: Int!
     eventsPagination(pageNumber: Int!, itemPerPage: Int!): [Event]
-    event(id: Int!): Event
+    event(id: ID!): Event
 }
 
 type Mutation {
     createEvent(data: CreateEventInput!) : Event
-    updateEvent(id: Int!, data: UpdateEventInput!) : Event
-    deleteEvent(id: Int!) : Event
+    updateEvent(id: ID!, data: UpdateEventInput!) : Event
+    deleteEvent(id: ID!) : Event
     deleteAllEvents: Int
 }
 

@@ -2,8 +2,8 @@ import { gql } from "@apollo/client";
 
 class ParticipantService {
     public static SUBSCRIPTION_PARTICIPANT_ADDED = gql`
-        subscription ParticipantAdded($eventId: Int!) {
-            participantAdded(event_id: $eventId) {
+        subscription ParticipantAdded($eventId: ID!) {
+            participantAdded(eventId: $eventId) {
                 id
                 user {
                     id

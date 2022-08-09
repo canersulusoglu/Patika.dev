@@ -31,14 +31,14 @@ const EventDetail: Page = () => {
         if(!Router.isReady) return;
         fetchData({
             variables: {
-                eventId: Number(event_id)
+                eventId: event_id
             }
         })
 
         subscribeToMore({
             document: ParticipantService.SUBSCRIPTION_PARTICIPANT_ADDED,
             variables: {
-                eventId: Number(event_id)
+                eventId: event_id
             },
             updateQuery: (prev, { subscriptionData }) => {
                 if (!subscriptionData.data) return prev;

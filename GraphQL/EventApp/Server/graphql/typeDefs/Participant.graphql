@@ -1,35 +1,35 @@
 type Participant {
-    id: Int!
-    user_id: Int!
-    event_id: Int!
+    id: ID!
+    userId: ID!
+    eventId: ID!
     user: User
     event: Event
-    createdDate: String
-    updatedDate: String
+    createdAt: String
+    updatedAt: String
 }
 
 input CreateParticipantInput {
-    user_id: Int!
-    event_id: Int!
+    userId: ID!
+    eventId: ID!
 }
 
 input UpdateParticipantInput {
-    user_id: Int
-    event_id: Int
+    userId: ID!
+    eventId: ID!
 }
 
 type Query {
     participants: [Participant]
-    participant(id: Int!): Participant
+    participant(id: ID!): Participant
 }
 
 type Mutation {
     createParticipant(data: CreateParticipantInput!) : Participant
-    updateParticipant(id: Int!, data: UpdateParticipantInput!) : Participant
-    deleteParticipant(id: Int!) : Participant
+    updateParticipant(id: ID!, data: UpdateParticipantInput!) : Participant
+    deleteParticipant(id: ID!) : Participant
     deleteAllParticipants: Int
 }
 
 type Subscription {
-    participantAdded(event_id: Int!): Participant!
+    participantAdded(eventId: ID!): Participant!
 }

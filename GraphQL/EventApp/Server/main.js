@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { createServer } from "http";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
@@ -7,8 +8,15 @@ import { WebSocketServer } from "ws";
 import { useServer } from "graphql-ws/lib/use/ws";
 import typeDefs from "./graphql/typeDefs";
 import resolvers from "./graphql/resolvers";
-import db from './data.json';
 import { PubSub } from "graphql-subscriptions";
+
+import { connectMongoDB } from "./utils/mongoDB";
+import {
+    Events,
+    Locations,
+    Participants,
+    Users
+} from "./models";
 
 const PORT = 4000;
 
@@ -29,9 +37,14 @@ const PORT = 4000;
     const serverCleanup = useServer(
         { 
             schema, 
-            context: (_ctx, _msg, _args) => ({ 
-                db, 
-                pubsub 
+            context: (_ctx, _msg, _args) => ({
+                pubsub,
+                db: {
+                    Events,
+                    Locations,
+                    Participants,
+                    Users
+                }
             }),
         }, 
         wsServer
@@ -52,7 +65,17 @@ const PORT = 4000;
             },
             ApolloServerPluginLandingPageLocalDefault({ embed: true }),
         ],
-        context: ({ req, res }) => ({req, res, db, pubsub}),
+        context: ({ req, res }) => ({
+            req, 
+            res, 
+            pubsub,
+            db: {
+                Events,
+                Locations,
+                Participants,
+                Users
+            }
+        }),
     });
 
     await server.start();
@@ -63,7 +86,8 @@ const PORT = 4000;
 
     httpServer.listen(PORT, () => {
         console.log(
-        `🚀  Server ready at http://localhost:${PORT}${server.graphqlPath}`
+        `🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`
         );
+        connectMongoDB();
     });
 })()
