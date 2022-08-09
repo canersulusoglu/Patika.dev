@@ -64,10 +64,10 @@ module.exports = {
     },
     Subscription: {
         eventCreated: {
-            subscribe: () => pubsub.asyncIterator("EVENT_CREATED")
+            subscribe: (_, __, { pubsub }) => pubsub.asyncIterator("EVENT_CREATED") 
         },
         eventCount: {
-            subscribe: () => pubsub.asyncIterator("EVENT_COUNT")
+            subscribe: (_, __, { pubsub }) => pubsub.asyncIterator("EVENT_COUNT")
         }
     },
     Event: {

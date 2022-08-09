@@ -54,6 +54,15 @@ class EventService {
         }
     `;
 
+    public static CREATE_EVENT = gql`
+        mutation CreateEvent($data: CreateEventInput!) {
+            createEvent(data: $data) {
+                id
+                createdDate
+            }
+        }
+    `;
+
     public static SUBSCRIPTION_EVENT_CREATED = gql`
         subscription EventCreated {
             eventCreated {
