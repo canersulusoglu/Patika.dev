@@ -42,6 +42,7 @@ const main = async () => {
         `🚀 Server ready at http://localhost:${process.env.PORT}${apolloServer.graphqlPath}`
         );
     });
+    return httpServer;
 };
 
-main();
+export default main();
