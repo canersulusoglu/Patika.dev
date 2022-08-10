@@ -1,0 +1,29 @@
+{
+  "name": "countries.api",
+  "version": "1.0.0",
+  "description": "An API for informations about countries.",
+  "main": "index.js",
+  "author": "Caner Sülüşoğlu",
+  "license": "MIT",
+  "scripts": {
+    "start": "node main.js",
+    "dev": "nodemon --exec yarn babel-node -- index.js"
+  },
+  "dependencies": {
+    "@graphql-tools/load-files": "^6.6.1",
+    "@graphql-tools/merge": "^8.3.2",
+    "@graphql-tools/schema": "^9.0.0",
+    "apollo-server-core": "^3.10.0",
+    "apollo-server-express": "^3.10.0",
+    "express": "^4.18.1",
+    "graphql": "^16.5.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.18.10",
+    "@babel/core": "^7.18.10",
+    "@babel/node": "^7.18.10",
+    "@babel/preset-env": "^7.18.10",
+    "dotenv": "^16.0.1",
+    "nodemon": "^2.0.19"
+  }
+}

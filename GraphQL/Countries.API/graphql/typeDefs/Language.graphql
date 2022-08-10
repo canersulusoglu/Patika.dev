@@ -1,0 +1,10 @@
+type Language {
+    code: String!
+    name: String!
+    native: String!
+}
+
+type Query {
+    languages: [Language!]!
+    language(code: ID!): Language
+}
