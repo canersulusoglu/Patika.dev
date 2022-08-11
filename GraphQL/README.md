@@ -11,6 +11,7 @@ This repository includes projects about GraphQL technology.
 - [Assignment 3 - [Subscriptions]](./Assignment_3/)
 - [Event App](./EventApp/)
 - [Countries API](https://github.com/canersulusoglu/Countries.API)
+- [Rick and Morty Client App](https://github.com/canersulusoglu/RickAndMortyCharacters)
 
 
 
