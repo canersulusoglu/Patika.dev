@@ -1,9 +1,0 @@
-type Continent {
-    code: ID!
-    name: String
-}
-
-type Query {
-    continents: [Continent!]!
-    continent(code: ID!): Continent
-}
