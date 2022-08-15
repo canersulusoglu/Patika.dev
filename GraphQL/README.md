@@ -12,6 +12,8 @@ This repository includes projects about GraphQL technology.
 - [Event App](./EventApp/)
 - [Countries API](https://github.com/canersulusoglu/Countries.API)
 - [Rick and Morty Client App](https://github.com/canersulusoglu/RickAndMortyCharacters)
+- [Anonymous Chat App](https://github.com/canersulusoglu/AnonymousChat)
+- [Realtime Voting App](https://github.com/canersulusoglu/RealtimeVoting)
 
 
 
