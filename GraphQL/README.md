@@ -13,7 +13,7 @@ This repository includes projects about GraphQL technology.
 - [Countries API](https://github.com/canersulusoglu/Countries.API)
 - [Rick and Morty Client App](https://github.com/canersulusoglu/RickAndMortyCharacters)
 - [Anonymous Chat App](https://github.com/canersulusoglu/AnonymousChat)
-- [Realtime Voting App](https://github.com/canersulusoglu/RealtimeVoting)
+- [Realtime Poll App](https://github.com/canersulusoglu/RealtimePoll)
 
 
 
