@@ -1,0 +1,73 @@
+<%- include("Layout/Header") %>
+
+    <!-- Masthead-->
+    <header class="masthead" style="padding-top: 4rem !important; padding-bottom: 4rem !important;"></header>
+
+    <!-- Add-->
+    <section class="page-section" id="contact">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="section-heading text-uppercase">Add New Project</h2>
+            </div>
+
+            <form id="contactForm">
+                <div class="row align-items-stretch mb-5">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <!-- Name input-->
+                            <input class="form-control" id="name" name="title" type="text" placeholder="Project Title *"
+                                data-sb-validations="required" required/>
+                            <div class="invalid-feedback" data-sb-feedback="name:required">Project title is required.</div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group form-group-textarea mb-md-0">
+                            <!-- Description input-->
+                            <textarea class="form-control" id="message" name="desc" placeholder="Project Description *"
+                                data-sb-validations="required" required></textarea>
+                            <div class="invalid-feedback" data-sb-feedback="message:required">Project description is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="mb-3 mt-3">
+                            <label for="projectPhoto" class="form-label">Project Photo *</label>
+                            <input class="form-control" type="file" id="projectPhoto" name="projectPhoto" data-sb-validations="required" required>
+                            <div class="invalid-feedback" data-sb-feedback="projectPhoto:required">Project photo is required.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center"><button class="btn btn-primary btn-xl text-uppercase   "
+                        id="submitButton" type="submit">Add Project</button></div>
+            </form>
+        </div>
+    </section>
+
+    <script>
+
+        $("form#contactForm").submit((e) => {
+            e.preventDefault();
+            var form = $("form#contactForm");
+            var formData = new FormData(form[0]);
+            $.ajax({
+                type: "POST",
+                url: '/add',
+                data: formData,
+                contentType: false,
+                processData: false,
+                cache: false,
+                success: (data) => {
+                    if(data.isSuccess){
+                        alert("Project successfully added.")
+                    }
+                },
+                error: (err) => {
+                    if(data.isSuccess){
+                        alert("An error occurred when creating project!")
+                    }
+                }
+            })
+        })
+    </script>
+
+<%- include("Layout/Footer") %>
