@@ -1,0 +1,71 @@
+<%- include("Layout/Header") %>
+
+<!-- Portfolio Section-->
+<section class="page-section portfolio mt-5" id="portfolio">
+    <div class="container">
+        <!-- Portfolio Section Heading-->
+        <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Add New Project</h2>
+        <!-- Icon Divider-->
+        <div class="divider-custom">
+            <div class="divider-custom-line"></div>
+            <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+            <div class="divider-custom-line"></div>
+        </div>
+        <!-- Portfolio Grid Items-->
+        <div class="row justify-content-center">
+            <!-- Portfolio Item 1-->
+            <div class="col-12">
+                <form id="addProjectForm">
+                    <!-- Name input-->
+                    <div class="form-floating mb-3">
+                        <input class="form-control" id="title" name="title" placeholder="Enter proeject title..." type="text" required />
+                        <label for="title">Project Title</label>
+                    </div>
+                    <!-- Description input-->
+                    <div class="form-floating mb-3">
+                        <textarea class="form-control" id="desc" name="desc" type="text" placeholder="Enter project description..." style="height: 10rem" required></textarea>
+                        <label for="desc">Project Description</label>
+                    </div>
+                    <!-- Project Photo input-->
+                    <div class="col-12">
+                        <div class="mb-3 mt-3">
+                            <label for="projectPhoto" class="form-label">Project Photo *</label>
+                            <input class="form-control" type="file" id="projectPhoto" name="projectPhoto" required>
+                        </div>
+                    </div>
+                    <!-- Submit Button-->
+                    <button class="btn btn-primary btn-lg" id="submitButton" type="submit">Add Project</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+
+    $("form#addProjectForm").submit((e) => {
+        e.preventDefault();
+        var form = $("form#addProjectForm");
+        var formData = new FormData(form[0]);
+        $.ajax({
+            type: "POST",
+            url: '/add',
+            data: formData,
+            contentType: false,
+            processData: false,
+            cache: false,
+            success: (data) => {
+                if(data.isSuccess){
+                    alert("Project successfully added.")
+                }
+            },
+            error: (err) => {
+                if(data.isSuccess){
+                    alert("An error occurred when creating project!")
+                }
+            }
+        })
+    })
+</script>
+
+<%- include("Layout/Footer") %>

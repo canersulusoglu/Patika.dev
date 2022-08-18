@@ -1,0 +1,136 @@
+<%- include("Layout/Header") %>
+
+<!-- Portfolio Section-->
+<section class="page-section portfolio mt-5" id="portfolio">
+    <div class="container">
+        <!-- Portfolio Section Heading-->
+        <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Portfolio</h2>
+        <!-- Icon Divider-->
+        <div class="divider-custom">
+            <div class="divider-custom-line"></div>
+            <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+            <div class="divider-custom-line"></div>
+        </div>
+        <!-- Portfolio Grid Items-->
+        <div class="row justify-content-center">
+            <% projects.forEach(project => { %>
+                <!-- Project Item-->
+                <div class="col-md-6 col-lg-4 mb-5">
+                    <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal<%= project.id %>">
+                        <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
+                            <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
+                        </div>
+                        <img class="img-fluid" src="<%= project.toJSON().data %>" alt="..." />
+                    </div>
+                </div>
+                <!-- Project Modal-->
+                <div class="portfolio-modal modal fade" id="portfolioModal<%= project.id %>" tabindex="-1" aria-labelledby="portfolioModal<%= project.id %>" aria-hidden="true">
+                    <div class="modal-dialog modal-xl">
+                        <div class="modal-content">
+                            <div class="modal-header border-0"><button class="btn-close" type="button" data-bs-dismiss="modal"
+                                    aria-label="Close"></button></div>
+                            <div class="modal-body text-center pb-5">
+                                <div class="container">
+                                    <div class="row justify-content-center">
+                                        <div class="col-lg-8">
+                                            <!-- Portfolio Modal - Title-->
+                                            <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0"><%= project.title %></h2>
+                                            <!-- Icon Divider-->
+                                            <div class="divider-custom">
+                                                <div class="divider-custom-line"></div>
+                                                <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                                                <div class="divider-custom-line"></div>
+                                            </div>
+                                            <!-- Portfolio Modal - Image-->
+                                            <img class="img-fluid rounded mb-5" src="<%= project.toJSON().data %>" alt="..." />
+                                            <!-- Portfolio Modal - Text-->
+                                            <p class="mb-4"><%= project.desc %></p>
+                                            <button onclick="deleteProject(this, '<%= project.id %>')" class="btn btn-danger">
+                                                <i class="fas fa-xmark fa-fw"></i>
+                                                Delete Project
+                                            </button>
+                                            <div class="mt-3">
+                                                <form class="updateProjectForm">
+                                                    <!-- Name input-->
+                                                    <div class="form-floating mb-3">
+                                                        <input class="form-control" id="title" name="title" placeholder="Enter proeject title..." type="text" />
+                                                        <label for="title">Project Title</label>
+                                                    </div>
+                                                    <!-- Description input-->
+                                                    <div class="form-floating mb-3">
+                                                        <textarea class="form-control" id="desc" name="desc" type="text" placeholder="Enter project description..." style="height: 10rem"></textarea>
+                                                        <label for="desc">Project Description</label>
+                                                    </div>
+                                                    <input hidden name="projectId" value="<%= project.id %>"/>
+                                                    <!-- Submit Button-->
+                                                    <button class="btn btn-primary btn-lg" id="submitButton" type="submit">Update Project</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    </div>
+</section>
+
+<script>
+    const deleteProject = (e, projectId) => {
+        $.ajax({
+            type: 'POST',
+            url: '/delete',
+            data: JSON.stringify({
+                projectId: projectId
+            }),
+            contentType: "application/json",
+            success: (data) => {
+                if(data.isSuccess){
+                    alert("Project successfully deleted.")
+                    location.reload()
+                }
+            },
+            error: (err) => {
+                if(data.isSuccess){
+                    alert("An error occurred when deleting project!")
+                }
+            }
+        })
+    }
+
+    $("form.updateProjectForm").submit((e) => {
+        e.preventDefault();
+        var projectId = e.target.projectId.value;
+        var title = e.target.title.value;
+        var desc = e.target.desc.value;
+        
+        if(title || desc){
+            $.ajax({
+                type: "POST",
+                url: '/update',
+                data: JSON.stringify({
+                    projectId,
+                    title,
+                    desc
+                }),
+                contentType: "application/json",
+                success: (data) => {
+                    if(data.isSuccess){
+                        alert("Project successfully updated.")
+                        location.reload()
+                    }
+                },
+                error: (err) => {
+                    if(data.isSuccess){
+                        alert("An error occurred when updating project!")
+                    }
+                }
+            })
+        }
+    })
+</script>
+
+<%- include("Layout/Footer") %>
