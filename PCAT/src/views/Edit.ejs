@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Photo</title>
+    <link rel="stylesheet" href="/public/assets/fontawesome/css/all.min.css"> <!-- https://fontawesome.com/ -->
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap" rel="stylesheet">
+    <!-- https://fonts.google.com/ -->
+    <link rel="stylesheet" href="/public/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/public/assets/css/templatemo-video-catalog.css">
+</head>
+<!--
+
+TemplateMo 552 Video Catalog
+
+https://templatemo.com/tm-552-video-catalog
+
+-->
+<body>
+	<div class="tm-page-wrap mx-auto">
+		<div class="position-relative">
+			<div class="potition-absolute tm-site-header">
+				<div class="container-fluid position-relative">
+					<div class="row">
+                        <div class="col-5 col-md-8 ml-auto mr-0">
+                            <div class="tm-site-nav">
+                                <nav class="navbar navbar-expand-lg mr-0 ml-auto" id="tm-main-nav">
+                                    <button class="navbar-toggler tm-bg-black py-2 px-3 mr-0 ml-auto collapsed" type="button"
+                                        data-toggle="collapse" data-target="#navbar-nav" aria-controls="navbar-nav"
+                                        aria-expanded="false" aria-label="Toggle navigation">
+                                        <span>
+                                            <i class="fas fa-bars tm-menu-closed-icon"></i>
+                                            <i class="fas fa-times tm-menu-opened-icon"></i>
+                                        </span>
+                                    </button>
+                                    <div class="collapse navbar-collapse tm-nav" id="navbar-nav">
+                                        <ul class="navbar-nav text-uppercase">
+                                            <li class="nav-item">
+                                                <a class="nav-link tm-nav-link" href="/">Photos</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </nav>
+                            </div>
+                        </div>
+					</div>
+				</div>
+			</div>
+			<div class="tm-welcome-container tm-fixed-header" style="background-image: url(<%= photo.toJSON().data %>);"></div>
+			<!-- Header image -->
+            <div id="tm-fixed-header-bg"></div> 
+		</div>
+
+		<!-- Page content -->
+		<div class="container-fluid">
+			<div class="mx-auto tm-content-container">
+				<main>
+					<div class="row mb-5 pb-4">
+						<div class="col-12">
+							<img src="<%= photo.toJSON().data %>" alt="Image" class="img-fluid tm-catalog-item-img">
+						</div>
+					</div>
+					<div class="row mb-5 pb-5">
+						<div class="col-xl-8 col-lg-7">
+							<!-- Video description -->
+							<div class="tm-video-description-box">
+								<h2 class="mb-5 tm-video-title"><%= photo.title %></h2>
+								<p class="mb-4"><%= photo.desc %></p>	
+							</div>							
+						</div>
+						<div class="col-xl-4 col-lg-5">
+							<!-- Share box -->
+							<div class="tm-bg-gray tm-share-box">
+								<div class="text-center">
+									<button type="button" data-toggle="modal" data-target="#updateModal" class="btn btn-success p-0 mb-4 tm-btn-animate tm-btn-update tm-icon-update"><span>Update Details</span></button>	
+								</div>	
+								<div class="text-center">
+									<button id="delete-photo-btn" class="btn btn-danger p-0 tm-btn-animate tm-btn-delete tm-icon-delete"><span>Delete Photo</span></button>	
+								</div>								
+							</div>
+						</div>
+					</div>
+				</main>
+				<!-- UPDATE Modal -->
+				<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel" aria-hidden="true">
+					<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+						<h5 class="modal-title" id="updateModalLabel">Update Details</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						</div>
+						<div class="modal-body">
+							<div class="row">
+								<div class="col mb-5 mt-3">
+									<form id="update-photo-form" class="tm-contact-form">
+										<div class="mb-3">
+											<label for="title" class="form-label">Title</label>
+											<input type="text" name="title" id="title" class="form-control rounded-0"/>
+										</div>
+										<div class="mb-3">
+											<label for="descTextArea" class="form-label">Description</label>
+											<textarea class="form-control" id="descTextArea" name="desc" rows="3"></textarea>
+										</div>
+	
+									  <div class="form-group mb-0">
+										<button type="submit" class="btn btn-primary rounded-0 d-block ml-auto mr-0 tm-btn-animate tm-btn-submit tm-icon-submit"><span>Update</span></button>
+									  </div>
+									</form>    
+								</div>
+							</div> 
+						</div>
+					</div>
+					</div>
+				</div>
+
+				
+
+                <footer class="row pt-5">
+                    <div class="col-12">
+                        <p class="text-right">Copyright 2020 The Video Catalog Company 
+                        
+                        - Designed by <a href="https://templatemo.com" rel="nofollow" target="_parent">TemplateMo</a></p>
+                    </div>
+                </footer>
+			</div> <!-- .tm-content-container -->
+		</div>
+	</div>
+
+	<script src="/public/assets/js/jquery-3.4.1.min.js"></script>
+    <script src="/public/assets/js/bootstrap.min.js"></script>
+    <script>
+    	$(document).ready(function() {
+    		$('.tm-likes-box').click(function(e) {
+    			e.preventDefault();
+    			$(this).toggleClass('tm-liked');
+
+    			if($(this).hasClass('tm-liked')) {
+    				$('#tm-likes-count').html('486 likes');
+    			} else {
+    				$('#tm-likes-count').html('485 likes');
+    			}
+    		});
+    	});
+
+		$("button#delete-photo-btn").click((e) => {
+			e.preventDefault();
+			
+			var photoId = "<%= photo.id %>";
+			$.ajax({
+				type: 'POST',
+				url: '/delete',
+				data: JSON.stringify({
+					photoId: photoId
+				}),
+				contentType: "application/json",
+                success: (data) => {
+                    if(data.isSuccess){
+                        alert("Photo successfully deleted.")
+						window.location.href = "/"
+                    }
+                },
+                error: (err) => {
+                    if(data.isSuccess){
+                        alert("An error occurred when deleting photo!")
+                    }
+                }
+			})
+		})
+
+		$("form#update-photo-form").submit((e) => {
+			e.preventDefault();
+            var form = $(this);
+			var photoId = "<%= photo.id %>";
+            var title = e.target.title.value;
+			var desc = e.target.desc.value;
+            $.ajax({
+                type: "POST",
+                url: '/update',
+                data: JSON.stringify({
+					photoId,
+					title,
+					desc
+				}),
+                contentType: "application/json",
+                success: (data) => {
+                    if(data.isSuccess){
+                        alert("Photo details successfully updated.")
+						location.reload()
+                    }
+                },
+                error: (err) => {
+                    if(data.isSuccess){
+                        alert("An error occurred when updating photo details!")
+                    }
+                }
+            })
+		})
+    </script>
+</body>
+</html>
