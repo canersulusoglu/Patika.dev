@@ -1,12 +1,5 @@
 # Freelancer
 
-<p align="center">
-  View Deployment on 
-  <a href="https://freelancer-express-webapp.herokuapp.com/" target="_blank">
-    <img align="center" src="https://img.shields.io/badge/heroku-%23430098.svg?style=for-the-badge&logo=heroku&logoColor=white">
-  </a>
-</p>
-
 ### Used Techs
 
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
